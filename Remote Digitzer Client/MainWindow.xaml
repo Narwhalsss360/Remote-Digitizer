@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Remote_Digitzer_Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Remote Digitizer Client" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Common;component/WindowStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-    </Grid>
+    <Window.Style>
+        <Style BasedOn="{StaticResource ResourceKey=CommonWindowStyle}" TargetType="Window" />
+    </Window.Style>
+
+    <Border Style="{DynamicResource MainWindowBorderStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource TitleBarHeight}" />
+                <RowDefinition />
+                <RowDefinition Height="{StaticResource StatusBarHeight}" />
+            </Grid.RowDefinitions>
+        </Grid>
+    </Border>
 </Window>

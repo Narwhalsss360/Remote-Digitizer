@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:pf="clr-namespace:System.Windows;assembly=PresentationFramework"
+                    xmlns:pc="clr-namespace:System.Windows.Media;assembly=PresentationCore"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <pc:Brush x:Key="MainWindowBackgroundColor">SlateGray</pc:Brush>
+    <pc:Brush x:Key="ForegroundColor">Linen</pc:Brush>
+    <pc:Brush x:Key="ActiveColor">SlateBlue</pc:Brush>
+    <pc:Brush x:Key="DisabledColor">DarkGray</pc:Brush>
+    
+    <Style x:Key="CommonWindowStyle" TargetType="Window">
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="Width" Value="500" />
+        <Setter Property="Height" Value="350" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="MainWindowBorderStyle" TargetType="Border">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background" Value="{StaticResource ResourceKey=MainWindowBackgroundColor}" />
+    </Style>
+
+    <pf:GridLength x:Key="TitleBarHeight">15</pf:GridLength>
+    <pf:GridLength x:Key="StatusBarHeight">15</pf:GridLength>
+</ResourceDictionary>
