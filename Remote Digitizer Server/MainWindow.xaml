@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Remote_Digitizer_Server"
+        xmlns:c="clr-namespace:Common;assembly=Common"
         mc:Ignorable="d"
         Title="Remote Digitzer Server">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Common;component/WindowStyle.xaml" />
+                <ResourceDictionary Source="/Common;component/Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -18,13 +20,21 @@
         <Style BasedOn="{StaticResource ResourceKey=CommonWindowStyle}" TargetType="Window" />
     </Window.Style>
 
-    <Border Style="{DynamicResource MainWindowBorderStyle}">
+    <Border x:Name="MainBorder" Style="{DynamicResource MainWindowBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="{StaticResource TitleBarHeight}" />
+                <RowDefinition Height="{StaticResource TitleBarHeightGridLength}" />
                 <RowDefinition />
-                <RowDefinition Height="{StaticResource StatusBarHeight}" />
+                <RowDefinition Height="{StaticResource StatusBarHeightGridLength}" />
             </Grid.RowDefinitions>
+
+            <c:WindowTitleBarControls x:Name="TitleBarControls" Title="Remote Digitizer Server" HorizontalAlignment="Stretch" Minimize="WindowTitleBarControls_Minimize" Maximize="WindowTitleBarControls_Maximize" Close="WindowTitleBarControls_Close">
+                <Control.Clip>
+                    <RectangleGeometry Rect="{Binding Converter={StaticResource BorderToRectConverter}, ElementName=MainBorder, Mode=OneWay}"
+                                       RadiusX="{Binding Converter={StaticResource BorderToSingleRadiusConverter}, ElementName=MainBorder, Mode=OneWay}"
+                                       RadiusY="{Binding Converter={StaticResource BorderToSingleRadiusConverter}, ElementName=MainBorder, Mode=OneWay}" />
+                </Control.Clip>
+            </c:WindowTitleBarControls>
         </Grid>
     </Border>
 </Window>
