@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Remote_Digitzer_Client;
+namespace Remote_Digitizer_Client;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

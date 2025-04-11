@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Remote_Digitzer_Client;
+namespace Remote_Digitizer_Client;
 
 /// <summary>
 /// Interaction logic for App.xaml
