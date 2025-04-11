@@ -47,7 +47,7 @@
             if (data.Length < offset + BUFFER_SIZE)
                 throw new ArgumentException("The array supplied is missing data.", nameof(data));
             PositionX = BitConverter.ToDouble(data, offset);
-            PositionX = BitConverter.ToDouble(data, offset + sizeof(double));
+            PositionY = BitConverter.ToDouble(data, offset + sizeof(double));
             _statusFlags = data[offset + 2 * sizeof(double)];
         }
 
