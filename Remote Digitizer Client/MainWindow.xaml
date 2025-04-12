@@ -18,8 +18,8 @@
 
     <Window.Style>
         <Style BasedOn="{StaticResource ResourceKey=CommonWindowStyle}" TargetType="Window">
-            <Setter Property="Width" Value="400" />
-            <Setter Property="Height" Value="200" />
+            <Setter Property="Width" Value="440" />
+            <Setter Property="Height" Value="330" />
         </Style>
     </Window.Style>
 
@@ -42,10 +42,27 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="PositionTextBox" Grid.Row="0" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="28" Text="(-.--- ,-.---)"/>
-                <TextBlock x:Name="StatusTextBox" Grid.Row="1" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="28" Text="Not Drawing"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <local:InputMapSelection x:Name="EnteredNormallyMap" Title="Entered Normally"  Grid.Column="1" Margin="3" />
+                <local:InputMapSelection x:Name="EnteredAlternateMap" Title="Entered Alternate" Grid.Row="1" Margin="3" />
+                <local:InputMapSelection x:Name="EnteredInvertedMap" Title="Entered Inverted" Grid.Row="1" Grid.Column="1" Margin="3" />
+                <local:InputMapSelection x:Name="TouchMap" Title="Touch" Grid.Row="2" Margin="3" />
+
+                <Grid Grid.Row="2" Grid.Column="1" Margin="0, 18, 0, 3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="PositionTextBox" Grid.Row="0" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(-.--- ,-.---)"/>
+                    <TextBlock x:Name="StatusTextBox" Grid.Row="1" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Not Drawing"/>
+                </Grid>
             </Grid>
 
             <DockPanel x:Name="StatusBarPanel" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource AlternateBackgroundColor}">

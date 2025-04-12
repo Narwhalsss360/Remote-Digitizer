@@ -11,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WindowsInput;
+using MouseButton = System.Windows.Input.MouseButton;
+using System.Runtime.InteropServices;
 
 namespace Remote_Digitizer_Client;
 
@@ -50,33 +53,19 @@ public partial class MainWindow : Window
         _receiverThread.Start();
     }
 
+    [DllImport("User32.dll")]
+    private static extern bool SetCursorPos(int X, int Y);
+
     private void Receiver()
     {
         UdpClient listener = new(Constants.PORT);
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, Constants.PORT);
 
-        const int MAX_WAITING_ITERATIONS = 150;
-        const int WAIT_TIME_BETWEEN_LONG_LISTEN = 2;
-
         ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Listening & Waiting...");
         int i;
+        StylusUpdateMessage message, oldMessage = new();
         while (!_stopReceiver)
         {
-            for (i = 0; i < MAX_WAITING_ITERATIONS; i++)
-            {
-                if (listener.Available > 0 || _stopReceiver)
-                    break;
-            }
-
-            if (_stopReceiver)
-                break;
-
-            if (i == MAX_WAITING_ITERATIONS)
-            {
-                Thread.Sleep(WAIT_TIME_BETWEEN_LONG_LISTEN);
-                continue;
-            }
-
             byte[] data = listener.Receive(ref sender);
 
             if (data.Length != StylusUpdateMessage.BUFFER_SIZE)
@@ -85,7 +74,6 @@ public partial class MainWindow : Window
             string senderAddress = sender.Address.ToString();
             ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = $"Received from ${senderAddress}");
 
-            StylusUpdateMessage message;
             if (_allowFrom is null)
                 message = new StylusUpdateMessage(data);
             else if (_allowFrom.Contains(sender.Address))
@@ -93,6 +81,18 @@ public partial class MainWindow : Window
             else
                 continue;
 
+
+            SetCursorPos((int)(message.PositionX * 1920), (int)(message.PositionY * 1080));
+            if ((message.Alternate != oldMessage.Alternate && !message.Alternate) || (message.Inverted != oldMessage.Inverted && !message.Inverted))
+                EnteredNormallyMap.Play(MouseButtonState.Pressed);
+            if (message.Alternate != oldMessage.Alternate)
+                EnteredAlternateMap.Play(message.Alternate ? MouseButtonState.Pressed : MouseButtonState.Released);
+            if (message.Inverted != oldMessage.Inverted)
+                EnteredInvertedMap.Play(message.Inverted ? MouseButtonState.Pressed : MouseButtonState.Released);
+            if (message.Touched != oldMessage.Touched)
+                TouchMap.Play(message.Touched ? MouseButtonState.Pressed : MouseButtonState.Released);
+
+            oldMessage = message;
             PositionTextBox.Dispatcher.Invoke(() => PositionTextBox.Text =
                 $"({message.PositionX:0.000}, {message.PositionY:0.000})"
             );
