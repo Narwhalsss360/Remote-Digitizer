@@ -150,7 +150,6 @@ public partial class MainWindow : Window
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, Constants.PORT);
 
         ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Listening & Waiting...");
-        int i;
         StylusUpdateMessage message, oldMessage = new();
         while (!_stopReceiver)
         {
@@ -169,7 +168,11 @@ public partial class MainWindow : Window
             else
                 continue;
 
-            SetCursorPos((int)(message.PositionX * 1920), (int)(message.PositionY * 1080));
+            double windowsScalingDivisor = SystemParameters.BorderWidth;
+            double screenWidth = SystemParameters.WorkArea.Width / windowsScalingDivisor;
+            double screenHeight = SystemParameters.WorkArea.Height / windowsScalingDivisor;
+
+            SetCursorPos((int)(message.PositionX * screenWidth), (int)(message.PositionY * screenHeight));
             if ((message.Alternate != oldMessage.Alternate && !message.Alternate) || (message.Inverted != oldMessage.Inverted && !message.Inverted))
                 EnteredNormallyMap.Play(MouseButtonState.Pressed);
             if (message.Alternate != oldMessage.Alternate)
