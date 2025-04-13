@@ -33,11 +33,19 @@ public partial class MainWindow : Window
         )
     );
 
+    static readonly string ALLOW_FROM_IPS_FILE_NAME = "AllowFrom.json";
+
+    static readonly FileInfo ALLOW_FROM_IPS_FILE = new FileInfo(
+        System.IO.Path.Join(
+            AppDomain.CurrentDomain.BaseDirectory, ALLOW_FROM_IPS_FILE_NAME
+        )
+    );
+
     Thread _listenerThread;
 
     bool _listening = false;
 
-    List<IPAddress>? _allowFrom;
+    IPAddress[] _allowFrom = [];
 
     HashSet<Profile> _profiles = new();
 
@@ -50,6 +58,7 @@ public partial class MainWindow : Window
         _listenerThread = new(() => { });
         InitializeComponent();
         LoadProfiles();
+        LoadAllowFromIPs();
         TitleBarControls.SizeChanged += (sender, e) => TitleBarControls.Clip = new RectangleGeometry(
             new Rect(new Size(Width, Height)),
             MainBorder.CornerRadius.TopLeft,
@@ -93,6 +102,52 @@ public partial class MainWindow : Window
         writer.Write(
             JsonSerializer.Serialize(_profiles, new JsonSerializerOptions() { WriteIndented = true })
         );
+    }
+
+    private void LoadAllowFromIPs()
+    {
+        if (!ALLOW_FROM_IPS_FILE.Exists)
+        {
+            _profiles.Add(new());
+            return;
+        }
+
+        using FileStream allowFromIPsFileStream = ALLOW_FROM_IPS_FILE.OpenRead();
+        string[] ipStrings = JsonSerializer.Deserialize<string[]>(allowFromIPsFileStream) ?? [];
+        List<IPAddress> allowFrom = new();
+        foreach (string ipString in ipStrings)
+        {
+            if (!IPAddress.TryParse(ipString, out IPAddress? ip) || ip is null)
+            {
+                MessageBox.Show($"{ipString} could not be parsed", "IP Parse Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                continue;
+            }
+            allowFrom.Add(ip);
+        }
+        _allowFrom = allowFrom.ToArray();
+    }
+
+    private void SaveAllowFromIPs()
+    {
+        using FileStream allowFromIPsFileStream = ALLOW_FROM_IPS_FILE.OpenWrite();
+        using StreamWriter writer = new(allowFromIPsFileStream);
+        writer.Write(
+            JsonSerializer.Serialize(from ip in _allowFrom select ip.ToString(), new JsonSerializerOptions() { WriteIndented = true })
+        );
+    }
+
+    private void OpenAllowFromSettings(object sender, EventArgs e)
+    {
+        Button openButton = (sender as Button)!;
+        AllowFromWindow allowFromWindow = new(_allowFrom);
+        allowFromWindow.Closed += (sender, e) =>
+        {
+            _allowFrom = allowFromWindow.IPAddresses;
+            openButton.IsEnabled = true;
+            SaveAllowFromIPs();
+        };
+        openButton.IsEnabled = false;
+        allowFromWindow.Show();
     }
     private void ApplyToProfile(object? sender, EventArgs e)
     {
@@ -166,19 +221,19 @@ public partial class MainWindow : Window
                 continue;
 
             byte[] data = listener.Receive(ref sender);
+            string senderAddress = sender.Address.ToString();
+
+            if (!(_allowFrom ?? []).Contains(sender.Address))
+            {
+                ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = $"Received from ${sender} whose IP is not allowed.");
+                continue;
+            }
 
             if (data.Length != StylusUpdateMessage.BUFFER_SIZE)
                 continue;
-
-            string senderAddress = sender.Address.ToString();
+            
             ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = $"Received from ${senderAddress}");
-
-            if (_allowFrom is null)
-                message = new StylusUpdateMessage(data);
-            else if (_allowFrom.Contains(sender.Address))
-                message = new StylusUpdateMessage(data);
-            else
-                continue;
+            message = new StylusUpdateMessage(data);
 
             double windowsScalingDivisor = SystemParameters.BorderWidth;
             double screenWidth = SystemParameters.WorkArea.Width / windowsScalingDivisor;
@@ -210,9 +265,12 @@ public partial class MainWindow : Window
 
     private void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
-        _listening = false;
         SaveProfiles();
-        _listenerThread.Join();
+        if (_listening)
+        {
+            _listening = false;
+            _listenerThread.Join();
+        }
     }
 
     private void TitleBarToggleDragMove(object sender, MouseButtonEventArgs e)
