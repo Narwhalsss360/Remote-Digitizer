@@ -80,6 +80,7 @@ namespace Remote_Digitizer_Server
             CanvasFrame.StylusButtonDown += CanvasFrame_StylusButtonDown;
             CanvasFrame.StylusButtonUp += CanvasFrame_StylusButtonUp;
             CanvasFrame.StylusDown += CanvasFrame_StylusDown;
+            CanvasFrame.StylusMove += CanvasFrame_StylusMove;
             CanvasFrame.StylusUp += CanvasFrame_StylusUp;
             CanvasFrame.StylusOutOfRange += CanvasFrame_StylusOutOfRange;
         }
@@ -143,6 +144,14 @@ namespace Remote_Digitizer_Server
             SavePosition(e.GetPosition(CanvasFrame));
             MainWindow.StylusState.Touched = true;
             MainWindow.StylusState.Inverted = e.Inverted;
+            CanvasFrame.MouseMove -= CanvasFrame_MouseMove;
+            MainWindow.UpdateStateOnUI();
+            _dataReady.Set();
+        }
+
+        private void CanvasFrame_StylusMove(object sender, StylusEventArgs e)
+        {
+            SavePosition(e.GetPosition(CanvasFrame));
             MainWindow.UpdateStateOnUI();
             _dataReady.Set();
         }
@@ -151,6 +160,7 @@ namespace Remote_Digitizer_Server
         {
             MainWindow.StylusState.Touched = false;
             MainWindow.StylusState.Inverted = e.Inverted;
+            CanvasFrame.MouseMove += CanvasFrame_MouseMove;
             MainWindow.UpdateStateOnUI();
             _dataReady.Set();
         }

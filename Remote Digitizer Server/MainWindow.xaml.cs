@@ -24,6 +24,10 @@ public partial class MainWindow : Window
 
     static MainWindow _instance;
 
+    private static readonly TimeSpan UI_UPDATE_INTERVAL = TimeSpan.FromMilliseconds(1000 / 30);
+
+    static DateTime _lastUpdate = DateTime.Now;
+
     public MainWindow()
     {
         _instance = this;
@@ -40,6 +44,9 @@ public partial class MainWindow : Window
 
     public static void UpdateStateOnUI()
     {
+        if (DateTime.Now - _lastUpdate < UI_UPDATE_INTERVAL)
+            return;
+        _lastUpdate = DateTime.Now;
         _instance.Dispatcher.InvokeAsync(() =>
         {
             _instance.PositionTextBlock.Text = $"({StylusState.PositionX:0.000}, {StylusState.PositionY:0.000})";
