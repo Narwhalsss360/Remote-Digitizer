@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Common;
+using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,6 +18,15 @@ namespace Remote_Digitizer_Server;
 /// </summary>
 public partial class MainWindow : Window
 {
+    public static MainWindow Current
+    {
+        get => (App.Current.MainWindow as MainWindow)!;
+    }
+
+    public StylusUpdateMessage StylusState = new();
+
+    BroadcastWindow? _broadcaster;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -26,6 +37,39 @@ public partial class MainWindow : Window
         );
         TitleBarControls.MouseDown += TitleBarToggleDragMove;
         TitleBarControls.MouseUp += TitleBarToggleDragMove;
+        Closed += (sender, e) => _broadcaster?.Close();
+    }
+
+    public void UpdateStateOnUI()
+    {
+
+    }
+
+    private void SetBlankState()
+    {
+
+    }
+
+    private void StartBroadcast(object sender, EventArgs e)
+    {
+        if (!IPAddress.TryParse(IPEntry.Text, out IPAddress? ip) || ip is null)
+        {
+            MessageBox.Show($"{IPEntry.Text} is not a valid IP Address.", "Invalid IP Address", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        Button button = (sender as Button)!;
+        button.IsEnabled = false;
+        IPEntry.IsEnabled = false;
+
+        _broadcaster = new(ip);
+        _broadcaster.Closed += (sender, e) =>
+        {
+            button.IsEnabled = true;
+            IPEntry.IsEnabled = true;
+            SetBlankState();
+        };
+        _broadcaster.Show();
     }
 
     private void TitleBarToggleDragMove(object sender, MouseButtonEventArgs e)

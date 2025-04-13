@@ -17,7 +17,10 @@
     </Window.Resources>
 
     <Window.Style>
-        <Style BasedOn="{StaticResource ResourceKey=CommonWindowStyle}" TargetType="Window" />
+        <Style BasedOn="{StaticResource ResourceKey=CommonWindowStyle}" TargetType="Window">
+            <Setter Property="Width" Value="400" />
+            <Setter Property="Height" Value="200" />
+        </Style>
     </Window.Style>
 
     <Border x:Name="MainBorder" Style="{DynamicResource MainWindowBorderStyle}">
@@ -25,7 +28,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="{StaticResource TitleBarHeightGridLength}" />
                 <RowDefinition />
-                <RowDefinition Height="{StaticResource StatusBarHeightGridLength}" />
             </Grid.RowDefinitions>
 
             <c:WindowTitleBarControls x:Name="TitleBarControls" Title="Remote Digitizer Server" HorizontalAlignment="Stretch" Minimize="WindowTitleBarControls_Minimize" Maximize="WindowTitleBarControls_Maximize" Close="WindowTitleBarControls_Close">
@@ -35,6 +37,24 @@
                                        RadiusY="{Binding Converter={StaticResource BorderToSingleRadiusConverter}, ElementName=MainBorder, Mode=OneWay}" />
                 </Control.Clip>
             </c:WindowTitleBarControls>
+
+            <DockPanel Grid.Row="1" VerticalAlignment="Stretch">
+                <DockPanel DockPanel.Dock="Top" Margin="3" MaxHeight="25" VerticalAlignment="Top">
+                    <Button DockPanel.Dock="Right" Click="StartBroadcast">
+                        <TextBlock Text="Broadcast" VerticalAlignment="Center" Margin="5, 2, 5, 5" />
+                    </Button>
+                    <TextBox x:Name="IPEntry" DockPanel.Dock="Left" Margin="0, 0, 5, 0"  VerticalContentAlignment="Center" />
+                </DockPanel>
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock x:Name="PositionTextBlock" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(---, ---)" />
+                    <TextBlock x:Name="StateTextBlock" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Text="Not Drawing" />
+                </Grid>
+            </DockPanel>
         </Grid>
     </Border>
 </Window>
