@@ -219,10 +219,14 @@ public partial class MainWindow : Window
             _listening = true;
             _listenerThread = new(Listener) { Name = "Remote Digitizer: Listener" };
             _listenerThread.Start();
+            ConnectionStatusTextBlock.Text = "Listening & Waiting...";
+            ListenToggleButtonText.Text = "Stop Listening";
         }
         else
         {
             _listening = false;
+            ConnectionStatusTextBlock.Text = "Standby";
+            ListenToggleButtonText.Text = "Listen";
         }
     }
 
@@ -231,11 +235,9 @@ public partial class MainWindow : Window
 
     private void Listener()
     {
-        UdpClient listener = new(Constants.PORT);
+        using UdpClient listener = new(Constants.PORT);
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, Constants.PORT);
 
-        ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Listening & Waiting...");
-        ListenToggleButtonText.Dispatcher.Invoke(() => ListenToggleButtonText.Text = "Stop Listening");
         StylusUpdateMessage message, oldMessage = new();
         while (_listening)
         {
@@ -279,10 +281,6 @@ public partial class MainWindow : Window
                 $"{(message.Alternate ? "Alternate " : "")}{(message.Touched ? "Drawing" : "Not Drawing")}{(message.Inverted ? " Inverted" : "")}"
             );
         }
-
-        ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Standby");
-        ListenToggleButtonText.Dispatcher.Invoke(() => ListenToggleButtonText.Text = "Listen");
-        listener.Close();
     }
 
     private void MainWindow_Closing(object? sender, CancelEventArgs e)
@@ -290,7 +288,7 @@ public partial class MainWindow : Window
         SaveProfiles();
         if (_listening)
         {
-            _listening = false;
+            ToggleListen(sender ?? new(), e);
             _listenerThread.Join();
         }
     }
