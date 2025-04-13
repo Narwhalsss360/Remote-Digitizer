@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="/Common;component/Converters.xaml" />
                 <ResourceDictionary>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockStyle}" />
+                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -63,9 +64,9 @@
                     <TextBlock Text="Profile &#x26; Connection"/>
                     <Grid Grid.Row="1" Margin="0, 1, 0, 2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width=".8*"/>
-                            <ColumnDefinition Width=".1*"/>
-                            <ColumnDefinition Width=".1*"/>
+                            <ColumnDefinition Width=".65*"/>
+                            <ColumnDefinition Width=".175*"/>
+                            <ColumnDefinition Width=".175*"/>
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="ProfileComboBox" Grid.Row="1" IsEditable="True" VerticalContentAlignment="Center" />

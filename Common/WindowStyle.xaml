@@ -4,6 +4,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Color x:Key="MainWindowBackgroundColor">SlateGray</Color>
     <Color x:Key="AlternateBackgroundColor">DarkSlateGray</Color>
+    <Color x:Key="MouseOverBackgroundColor">DimGray</Color>
     <Color x:Key="ForegroundColor">LightGray</Color>
     <Color x:Key="ActiveForegroundColor">Linen</Color>
     <Color x:Key="DisabledColor">DarkGray</Color>
@@ -38,6 +39,37 @@
         <Setter Property="Foreground">
             <Setter.Value>
                 <SolidColorBrush Color="{StaticResource ForegroundColor}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DefaultButtonStyle" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border" CornerRadius="3" BorderThickness="1" BorderBrush="Gray">
+                        <Border.Background>
+                            <SolidColorBrush Color="{StaticResource AlternateBackgroundColor}" />
+                        </Border.Background>
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4" />
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                            To="{StaticResource MouseOverBackgroundColor}" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
