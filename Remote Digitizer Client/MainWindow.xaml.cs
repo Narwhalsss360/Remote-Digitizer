@@ -249,14 +249,14 @@ public partial class MainWindow : Window
 
             if (!(_allowFrom ?? []).Contains(sender.Address))
             {
-                ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = $"Received from ${sender} whose IP is not allowed.");
+                ConnectionStatusTextBlock.Dispatcher.InvokeAsync(() => ConnectionStatusTextBlock.Text = $"Received from ${sender} whose IP is not allowed.");
                 continue;
             }
 
             if (data.Length != StylusUpdateMessage.BUFFER_SIZE)
                 continue;
             
-            ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = $"Received from ${senderAddress}");
+            ConnectionStatusTextBlock.Dispatcher.InvokeAsync(() => ConnectionStatusTextBlock.Text = $"Received from ${senderAddress}");
             message = new StylusUpdateMessage(data);
 
             double windowsScalingDivisor = SystemParameters.BorderWidth;
@@ -274,10 +274,10 @@ public partial class MainWindow : Window
                 TouchMap.Play(message.Touched ? MouseButtonState.Pressed : MouseButtonState.Released);
 
             oldMessage = message;
-            PositionTextBox.Dispatcher.Invoke(() => PositionTextBox.Text =
+            PositionTextBox.Dispatcher.InvokeAsync(() => PositionTextBox.Text =
                 $"({message.PositionX:0.000}, {message.PositionY:0.000})"
             );
-            StatusTextBox.Dispatcher.Invoke(() => StatusTextBox.Text =
+            StatusTextBox.Dispatcher.InvokeAsync(() => StatusTextBox.Text =
                 $"{(message.Alternate ? "Alternate " : "")}{(message.Touched ? "Drawing" : "Not Drawing")}{(message.Inverted ? " Inverted" : "")}"
             );
         }
