@@ -58,7 +58,22 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Profile &#x26; Connection"/>
-                    <ComboBox x:Name="ProfileComboBox" Grid.Row="1" Margin="0, 1, 0, 2" IsEditable="True" VerticalContentAlignment="Center" />
+                    <Grid Grid.Row="1" Margin="0, 1, 0, 2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".8*"/>
+                            <ColumnDefinition Width=".1*"/>
+                            <ColumnDefinition Width=".1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="ProfileComboBox" Grid.Row="1" IsEditable="True" VerticalContentAlignment="Center" />
+                        <Button Grid.Column="1" Click="DeleteProfileClick">
+                            <TextBlock Foreground="Red" Text="x"/>
+                        </Button>
+                        <Button Grid.Column="2" Click="AddProfileClick">
+                            <TextBlock Text="+"/>
+                        </Button>
+                    </Grid>
+
                     <Grid Grid.Row="2" Margin="0, 2, 0, 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width=".8*"/>

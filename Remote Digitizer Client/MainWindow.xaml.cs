@@ -47,7 +47,7 @@ public partial class MainWindow : Window
 
     IPAddress[] _allowFrom = [];
 
-    HashSet<Profile> _profiles = new();
+    List<Profile> _profiles = new();
 
     int _currentProfileIndex = 0;
 
@@ -91,7 +91,7 @@ public partial class MainWindow : Window
         }
 
         using FileStream profilesFileStream = PROFILES_FILE.OpenRead();
-        _profiles = JsonSerializer.Deserialize<HashSet<Profile>>(profilesFileStream) ?? new() { new() };
+        _profiles = JsonSerializer.Deserialize<List<Profile>>(profilesFileStream) ?? new() { new() };
         ApplyCurrentProfile();
     }
 
@@ -179,6 +179,28 @@ public partial class MainWindow : Window
 
         ProfileComboBox.ItemsSource = from profile in _profiles select profile.Name;
         ProfileComboBox.SelectedIndex = _currentProfileIndex;
+    }
+
+    private void AddProfileClick(object sender, EventArgs e)
+    {
+        _currentProfileIndex = _profiles.Count;
+        _profiles.Add(new());
+        ApplyCurrentProfile();
+    }
+
+    private void DeleteProfileClick(object sender, EventArgs e)
+    {
+        if (_profiles.Count == 1)
+        {
+            _profiles.Clear();
+            _profiles.Add(new());
+        }
+        else
+        {
+            _profiles.Remove(CurrentProfile);
+            _currentProfileIndex = 0;
+        }
+        ApplyCurrentProfile();
     }
 
     private void ApplyProfileName(object sender, EventArgs e)

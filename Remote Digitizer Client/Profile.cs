@@ -30,7 +30,5 @@ namespace Remote_Digitizer_Client
         public InputMap EnteredInverted { get; set;} = new();
 
         public InputMap Touch { get; set; }  = new();
-
-        public override int GetHashCode() => Name.GetHashCode();
     }
 }
