@@ -50,6 +50,17 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
+                <Grid Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".15*"/>
+                        <RowDefinition Height=".425*"/>
+                        <RowDefinition Height=".425*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Profile &#x26; Connection"/>
+                    <ComboBox x:Name="ProfileComboBox" Grid.Row="1" Margin="0, 1, 0, 2" IsEditable="True" />
+                </Grid>
+
                 <local:InputMapSelection x:Name="EnteredNormallyMap" Title="Entered Normally"  Grid.Column="1" Margin="3" />
                 <local:InputMapSelection x:Name="EnteredAlternateMap" Title="Entered Alternate" Grid.Row="1" Margin="3" />
                 <local:InputMapSelection x:Name="EnteredInvertedMap" Title="Entered Inverted" Grid.Row="1" Grid.Column="1" Margin="3" />
