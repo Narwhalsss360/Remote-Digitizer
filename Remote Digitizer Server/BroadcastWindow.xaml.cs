@@ -53,8 +53,6 @@ namespace Remote_Digitizer_Server
             set => SetValue(DrawOnCanvasProperty, value);
         }
 
-        MainWindow MainWindow { get => MainWindow.Current; }
-
         AutoResetEvent _dataReady = new(false);
 
         Thread _broadcasterThread;

@@ -18,17 +18,15 @@ namespace Remote_Digitizer_Server;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public static MainWindow Current
-    {
-        get => (App.Current.MainWindow as MainWindow)!;
-    }
-
-    public StylusUpdateMessage StylusState = new();
+    public static StylusUpdateMessage StylusState = new();
 
     BroadcastWindow? _broadcaster;
 
+    static MainWindow _instance;
+
     public MainWindow()
     {
+        _instance = this;
         InitializeComponent();
         TitleBarControls.SizeChanged += (sender, e) => TitleBarControls.Clip = new RectangleGeometry(
             new Rect(new Size(Width, Height)),
@@ -40,10 +38,13 @@ public partial class MainWindow : Window
         Closed += (sender, e) => _broadcaster?.Close();
     }
 
-    public void UpdateStateOnUI()
+    public static void UpdateStateOnUI()
     {
-        PositionTextBlock.Text = $"({StylusState.PositionX:0.000}, {StylusState.PositionY:0.000})";
-        StateTextBlock.Text = $"{(StylusState.Alternate ? "Alternate " : "")}{(StylusState.Touched ? "Drawing" : "Not Drawing")}{(StylusState.Inverted ? " Inverted" : "")}";
+        _instance.Dispatcher.InvokeAsync(() =>
+        {
+            _instance.PositionTextBlock.Text = $"({StylusState.PositionX:0.000}, {StylusState.PositionY:0.000})";
+            _instance.StateTextBlock.Text = $"{(StylusState.Alternate ? "Alternate " : "")}{(StylusState.Touched ? "Drawing" : "Not Drawing")}{(StylusState.Inverted ? " Inverted" : "")}";
+        });
     }
 
     private void SetBlankState()
