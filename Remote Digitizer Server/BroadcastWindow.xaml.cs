@@ -83,11 +83,16 @@ namespace Remote_Digitizer_Server
             CanvasFrame.StylusUp += CanvasFrame_StylusUp;
             CanvasFrame.StylusOutOfRange += CanvasFrame_StylusOutOfRange;
         }
+
+        private void SavePosition(Point p)
+        {
+            MainWindow.StylusState.PositionX = p.X / CanvasFrame.ActualWidth;
+            MainWindow.StylusState.PositionY = p.Y / CanvasFrame.ActualHeight;
+        }
+
         private void CanvasFrame_StylusInRange(object sender, StylusEventArgs e)
         {
-            Point position = e.GetPosition(CanvasFrame);
-            MainWindow.StylusState.PositionX = position.X;
-            MainWindow.StylusState.PositionY = position.Y;
+            SavePosition(e.GetPosition(CanvasFrame));
             MainWindow.StylusState.Inverted = e.Inverted;
             CanvasFrame.MouseMove += CanvasFrame_MouseMove;
             MainWindow.UpdateStateOnUI();
@@ -128,18 +133,14 @@ namespace Remote_Digitizer_Server
 
         private void CanvasFrame_MouseMove(object sender, MouseEventArgs e)
         {
-            Point position = e.GetPosition(CanvasFrame);
-            MainWindow.StylusState.PositionX = position.X;
-            MainWindow.StylusState.PositionY = position.Y;
+            SavePosition(e.GetPosition(CanvasFrame));
             MainWindow.UpdateStateOnUI();
             _dataReady.Set();
         }
 
         private void CanvasFrame_StylusDown(object sender, StylusDownEventArgs e)
         {
-            Point position = e.GetPosition(CanvasFrame);
-            MainWindow.StylusState.PositionX = position.X;
-            MainWindow.StylusState.PositionY = position.Y;
+            SavePosition(e.GetPosition(CanvasFrame));
             MainWindow.StylusState.Touched = true;
             MainWindow.StylusState.Inverted = e.Inverted;
             MainWindow.UpdateStateOnUI();
