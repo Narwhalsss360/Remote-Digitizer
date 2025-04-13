@@ -70,11 +70,11 @@
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="ProfileComboBox" Grid.Row="1" IsEditable="True" VerticalContentAlignment="Center" />
-                        <Button Grid.Column="1" Click="DeleteProfileClick">
+                        <Button Grid.Column="1" Click="DeleteProfileClick" Style="{StaticResource DefaultButtonStyle}">
                             <TextBlock Foreground="Red" Text="x"/>
                         </Button>
-                        <Button Grid.Column="2" Click="AddProfileClick">
-                            <TextBlock Text="+"/>
+                        <Button Grid.Column="2" Click="AddProfileClick" Style="{StaticResource DefaultButtonStyle}">
+                            <TextBlock Text="+" Style="{StaticResource DefaultTextBlockStyle}" />
                         </Button>
                     </Grid>
 
@@ -84,8 +84,12 @@
                             <ColumnDefinition Width=".2*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="ListenToggleButton" Click="ToggleListen" Content="Listen" />
-                        <Button Grid.Column="1" Content="&#x2699;" Click="OpenAllowFromSettings" />
+                        <Button Style="{StaticResource DefaultButtonStyle}" Click="ToggleListen">
+                            <TextBlock x:Name="ListenToggleButtonText" Text="Listen" Style="{StaticResource DefaultTextBlockStyle}"/>
+                        </Button>
+                        <Button Grid.Column="1"  Style="{StaticResource DefaultButtonStyle}" Click="OpenAllowFromSettings">
+                            <TextBlock Text="&#x2699;" Style="{StaticResource DefaultTextBlockStyle}" />
+                        </Button>
                     </Grid>
                 </Grid>
 
@@ -99,8 +103,8 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="PositionTextBox" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(-.--- ,-.---)"/>
-                    <TextBlock x:Name="StatusTextBox" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Not Drawing"/>
+                    <TextBlock x:Name="PositionTextBox" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(-.--- ,-.---)"/>
+                    <TextBlock x:Name="StatusTextBox" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Not Drawing"/>
                 </Grid>
             </Grid>
 
@@ -111,7 +115,7 @@
                 <DockPanel.Clip>
                     <RectangleGeometry Rect="0, -10, 500, 25" RadiusX="10" RadiusY="10" />
                 </DockPanel.Clip>
-                <TextBlock x:Name="ConnectionStatusTextBlock" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Standby" VerticalAlignment="Center" />
+                <TextBlock x:Name="ConnectionStatusTextBlock" Style="{StaticResource DefaultTextBlockStyle}" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Standby" VerticalAlignment="Center" />
             </DockPanel>
         </Grid>
     </Border>

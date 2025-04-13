@@ -235,7 +235,7 @@ public partial class MainWindow : Window
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, Constants.PORT);
 
         ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Listening & Waiting...");
-        ListenToggleButton.Dispatcher.Invoke(() => ListenToggleButton.Content = "Stop Listening");
+        ListenToggleButtonText.Dispatcher.Invoke(() => ListenToggleButtonText.Text = "Stop Listening");
         StylusUpdateMessage message, oldMessage = new();
         while (_listening)
         {
@@ -281,7 +281,7 @@ public partial class MainWindow : Window
         }
 
         ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Standby");
-        ListenToggleButton.Dispatcher.Invoke(() => ListenToggleButton.Content = "Listen");
+        ListenToggleButtonText.Dispatcher.Invoke(() => ListenToggleButtonText.Text = "Listen");
         listener.Close();
     }
 

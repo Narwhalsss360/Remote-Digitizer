@@ -18,9 +18,13 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Color="{StaticResource MainWindowBackgroundColor}" />
+    </Window.Background>
+    
     <DockPanel Margin="10">
-        <Button DockPanel.Dock="Bottom" Margin="0, 10, 0, 0" Click="ApplyAndClose" MinHeight="25">
-            <TextBlock Text="Apply &#x26; Close"/>
+        <Button DockPanel.Dock="Bottom" Style="{StaticResource DefaultButtonStyle}" Margin="0, 10, 0, 0" Click="ApplyAndClose" MinHeight="25">
+            <TextBlock Text="Apply &#x26; Close" Style="{StaticResource DefaultTextBlockStyle}"/>
         </Button>
         <DockPanel DockPanel.Dock="Bottom" LastChildFill="True" HorizontalAlignment="Stretch" MinHeight="25" MaxHeight="45" Margin="0, 10, 0, 0">
             <Button DockPanel.Dock="Right" Click="AddClick">
@@ -29,6 +33,9 @@
             <TextBox x:Name="AddTextBox" DockPanel.Dock="Left" Margin="0, 0, 5, 0" VerticalContentAlignment="Center"/>
         </DockPanel>
         <ListBox DockPanel.Dock="Top" x:Name="AddressListBox" ItemsSource="{Binding Addresses}">
+            <ListBox.Background>
+                <SolidColorBrush Color="{StaticResource AlternateBackgroundColor}" />
+            </ListBox.Background>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -37,7 +44,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
-                        <TextBlock Text="{Binding Address}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Address}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center" />
                         <Button DockPanel.Dock="Right" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem, AncestorLevel=1}}" Click="RemoveClick">
                             <TextBlock Margin="3" Text="Remove" Foreground="Red" VerticalAlignment="Center" />
                         </Button>
