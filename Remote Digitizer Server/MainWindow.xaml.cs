@@ -42,12 +42,14 @@ public partial class MainWindow : Window
 
     public void UpdateStateOnUI()
     {
-
+        PositionTextBlock.Text = $"({StylusState.PositionX:0.000}, {StylusState.PositionY:0.000})";
+        StateTextBlock.Text = $"{(StylusState.Alternate ? "Alternate " : "")}{(StylusState.Touched ? "Drawing" : "Not Drawing")}{(StylusState.Inverted ? " Inverted" : "")}";
     }
 
     private void SetBlankState()
     {
-
+        PositionTextBlock.Text = "(---, ---)";
+        StateTextBlock.Text = "Not Drawing";
     }
 
     private void StartBroadcast(object sender, EventArgs e)
