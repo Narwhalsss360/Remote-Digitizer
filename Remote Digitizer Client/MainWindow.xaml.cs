@@ -33,9 +33,9 @@ public partial class MainWindow : Window
         )
     );
 
-    Thread _receiverThread;
+    Thread _listenerThread;
 
-    bool _stopReceiver = false;
+    bool _listening = false;
 
     List<IPAddress>? _allowFrom;
 
@@ -47,7 +47,7 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
-        _receiverThread = new(Receiver);
+        _listenerThread = new(() => { });
         InitializeComponent();
         LoadProfiles();
         TitleBarControls.SizeChanged += (sender, e) => TitleBarControls.Clip = new RectangleGeometry(
@@ -63,7 +63,6 @@ public partial class MainWindow : Window
             MainBorder.CornerRadius.TopRight
         );
         Closing += MainWindow_Closing;
-        Loaded += MainWindow_Loaded;
 
         EnteredNormallyMap.InputVerified += ApplyToProfile;
         EnteredAlternateMap.InputVerified += ApplyToProfile;
@@ -136,23 +135,36 @@ public partial class MainWindow : Window
         ProfileComboBox.ItemsSource = from profile in _profiles select profile.Name;
     }
 
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    void ToggleListen(object sender, EventArgs e)
     {
-        _receiverThread.Start();
+        if (!_listening)
+        {
+            _listening = true;
+            _listenerThread = new(Listener) { Name = "Remote Digitizer: Listener" };
+            _listenerThread.Start();
+        }
+        else
+        {
+            _listening = false;
+        }
     }
 
     [DllImport("User32.dll")]
     private static extern bool SetCursorPos(int X, int Y);
 
-    private void Receiver()
+    private void Listener()
     {
         UdpClient listener = new(Constants.PORT);
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, Constants.PORT);
 
         ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Listening & Waiting...");
+        ListenToggleButton.Dispatcher.Invoke(() => ListenToggleButton.Content = "Stop Listening");
         StylusUpdateMessage message, oldMessage = new();
-        while (!_stopReceiver)
+        while (_listening)
         {
+            if (listener.Available == 0)
+                continue;
+
             byte[] data = listener.Receive(ref sender);
 
             if (data.Length != StylusUpdateMessage.BUFFER_SIZE)
@@ -191,14 +203,16 @@ public partial class MainWindow : Window
             );
         }
 
+        ConnectionStatusTextBlock.Dispatcher.Invoke(() => ConnectionStatusTextBlock.Text = "Standby");
+        ListenToggleButton.Dispatcher.Invoke(() => ListenToggleButton.Content = "Listen");
         listener.Close();
     }
 
     private void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
-        _stopReceiver = true;
+        _listening = false;
         SaveProfiles();
-        _receiverThread.Join();
+        _listenerThread.Join();
     }
 
     private void TitleBarToggleDragMove(object sender, MouseButtonEventArgs e)

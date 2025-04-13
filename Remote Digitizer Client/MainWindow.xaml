@@ -59,6 +59,15 @@
 
                     <TextBlock Text="Profile &#x26; Connection"/>
                     <ComboBox x:Name="ProfileComboBox" Grid.Row="1" Margin="0, 1, 0, 2" IsEditable="True" />
+                    <Grid Grid.Row="2" Margin="0, 2, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".8*"/>
+                            <ColumnDefinition Width=".2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="ListenToggleButton" Click="ToggleListen" Content="Listen" />
+                        <Button Grid.Column="1" Content="&#x2699;" />
+                    </Grid>
                 </Grid>
 
                 <local:InputMapSelection x:Name="EnteredNormallyMap" Title="Entered Normally"  Grid.Column="1" Margin="3" />
@@ -80,7 +89,7 @@
                 <DockPanel.Clip>
                     <RectangleGeometry Rect="0, -10, 500, 25" RadiusX="10" RadiusY="10" />
                 </DockPanel.Clip>
-                <TextBlock x:Name="ConnectionStatusTextBlock" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Disconnected" VerticalAlignment="Center" Foreground="{StaticResource ForegroundColor}" />
+                <TextBlock x:Name="ConnectionStatusTextBlock" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Standby" VerticalAlignment="Center" Foreground="{StaticResource ForegroundColor}" />
             </DockPanel>
         </Grid>
     </Border>
