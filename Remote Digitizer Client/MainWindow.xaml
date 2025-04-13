@@ -12,6 +12,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Common;component/WindowStyle.xaml" />
                 <ResourceDictionary Source="/Common;component/Converters.xaml" />
+                <ResourceDictionary>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockStyle}" />
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -95,16 +98,19 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="PositionTextBox" Grid.Row="0" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(-.--- ,-.---)"/>
-                    <TextBlock x:Name="StatusTextBox" Grid.Row="1" Foreground="{StaticResource ActiveForegroundColor}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Not Drawing"/>
+                    <TextBlock x:Name="PositionTextBox" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="(-.--- ,-.---)"/>
+                    <TextBlock x:Name="StatusTextBox" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Not Drawing"/>
                 </Grid>
             </Grid>
 
-            <DockPanel x:Name="StatusBarPanel" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource AlternateBackgroundColor}">
+            <DockPanel x:Name="StatusBarPanel" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <DockPanel.Background>
+                    <SolidColorBrush Color="{StaticResource AlternateBackgroundColor}" />
+                </DockPanel.Background>
                 <DockPanel.Clip>
                     <RectangleGeometry Rect="0, -10, 500, 25" RadiusX="10" RadiusY="10" />
                 </DockPanel.Clip>
-                <TextBlock x:Name="ConnectionStatusTextBlock" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Standby" VerticalAlignment="Center" Foreground="{StaticResource ForegroundColor}" />
+                <TextBlock x:Name="ConnectionStatusTextBlock" Margin="5, 0, 0, 0" DockPanel.Dock="Left" Text="Standby" VerticalAlignment="Center" />
             </DockPanel>
         </Grid>
     </Border>

@@ -15,8 +15,15 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Control.Resources>
-    <DockPanel x:Name="TitleBarDockPanel" HorizontalAlignment="Stretch" Background="{StaticResource AlternateBackgroundColor}">
-        <TextBlock Margin="10, 0, 0, 0" Text="{Binding Title}" Foreground="{StaticResource ForegroundColor}" />
+    <DockPanel x:Name="TitleBarDockPanel" HorizontalAlignment="Stretch">
+        <DockPanel.Background>
+            <SolidColorBrush Color="{StaticResource AlternateBackgroundColor}" />
+        </DockPanel.Background>
+        <TextBlock Margin="10, 0, 0, 0" Text="{Binding Title}">
+            <TextBlock.Foreground>
+                <SolidColorBrush Color="{StaticResource ForegroundColor}"/>
+            </TextBlock.Foreground>
+        </TextBlock>
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
             <Border x:Name="MinimizeButton" Height="10" MouseDown="ButtonClick" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave" Width="10" Margin="0, 0, 7, 0" CornerRadius="5" Background="Yellow"/>
             <Border x:Name="MaximizeButton" Height="10" MouseDown="ButtonClick" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave" Width="10" Margin="0, 0, 7, 0" CornerRadius="5" Background="SpringGreen" OpacityMask="Black"/>
