@@ -12,10 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Common;component/WindowStyle.xaml" />
                 <ResourceDictionary Source="/Common;component/Converters.xaml" />
-                <ResourceDictionary>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockStyle}" />
-                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}" />
-                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
